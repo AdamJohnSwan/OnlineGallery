@@ -24,6 +24,10 @@ var playerObj = null;
 var galleryScene = null;
 var collisionObjs = null;
 
+var loader = document.getElementById("loader");
+var loaderContainer = document.getElementById("loader-container");
+var startButton = document.getElementById("start");
+
 init();
 animate();
 
@@ -40,25 +44,17 @@ function init() {
 	var blocker = document.getElementById( 'blocker' );
 	var instructions = document.getElementById( 'instructions' );
 
-	instructions.addEventListener( 'click', function () {
-
+	startButton.addEventListener( 'click', function () {
 		controls.lock();
-
 	}, false );
 
 	controls.addEventListener( 'lock', function () {
-
-		instructions.style.display = 'none';
-		blocker.style.display = 'none';
-
-	} );
+		loaderContainer.style.display = 'none';
+	});
 
 	controls.addEventListener( 'unlock', function () {
-
-		blocker.style.display = 'block';
-		instructions.style.display = '';
-
-	} );
+		loaderContainer.style.display = 'block';
+	});
 
 	scene.add( controls.getObject());
 
@@ -134,8 +130,10 @@ function init() {
 			galleryScene.name = "Gallery";
 			collisionObjs = galleryScene.children.find(obj => obj.name === "CollisionObjects");
 			scene.add(galleryScene);
+			//Hide the spinner and show the play button
+			loader.style.display = "none";
+			startButton.style.display = "block";
 			
-
 		},
 
 		// onProgress callback
@@ -200,10 +198,10 @@ function animate() {
 		var lookingDirection = new THREE.Vector3(0, 0, -1);
 		camera.getWorldDirection(lookingDirection);
 		lookingDirection.normalize()
-		lookingDirection.y = 0;
+		lookingDirection.y = 0
 		
 		var oppositeDirection = lookingDirection.clone();
-		oppositeDirection.multiplyScalar(-1)
+		oppositeDirection.multiplyScalar(-1);
 		
 		var leftDirection = lookingDirection.clone();
 		leftDirection.x = lookingDirection.z;
@@ -218,8 +216,8 @@ function animate() {
 		forwardRightDirection.z = lookingDirection.x * Math.sin(THREE.Math.degToRad(45)) + lookingDirection.z * Math.cos(THREE.Math.degToRad(45))
 		
 		var forwardLeftDirection = lookingDirection.clone();
-		forwardRightDirection.x = (lookingDirection.x * Math.cos(THREE.Math.degToRad(45)) - lookingDirection.z * Math.sin(THREE.Math.degToRad(45))) * -1;
-		forwardRightDirection.z = lookingDirection.x * Math.sin(THREE.Math.degToRad(45)) + lookingDirection.z * Math.cos(THREE.Math.degToRad(45))
+		forwardLeftDirection.x = (lookingDirection.x * Math.cos(THREE.Math.degToRad(45)) - lookingDirection.z * Math.sin(THREE.Math.degToRad(45))) * -1;
+		forwardLeftDirection.z = lookingDirection.x * Math.sin(THREE.Math.degToRad(45)) + lookingDirection.z * Math.cos(THREE.Math.degToRad(45))
 		
 		var oppositeRightDirection = oppositeDirection.clone();
 		oppositeRightDirection.x = oppositeDirection.x * Math.cos(THREE.Math.degToRad(45)) - oppositeDirection.z * Math.sin(THREE.Math.degToRad(45));
@@ -228,7 +226,6 @@ function animate() {
 		var oppositeLeftDirection = oppositeDirection.clone();
 		oppositeLeftDirection.x = (oppositeDirection.x * Math.cos(THREE.Math.degToRad(45)) - oppositeDirection.z * Math.sin(THREE.Math.degToRad(45))) * -1;
 		oppositeLeftDirection.z = oppositeDirection.x * Math.sin(THREE.Math.degToRad(45)) + oppositeDirection.z * Math.cos(THREE.Math.degToRad(45))
-		
 		
 		var rayDirections = [
 			lookingDirection,
@@ -242,7 +239,7 @@ function animate() {
 		];
 		
 		rayDirections.forEach((rayDir, i) => {
-			var ray = new THREE.Raycaster( controls.getObject().position, rayDir,0 , 2);
+			var ray = new THREE.Raycaster( controls.getObject().position, rayDir,0 , 1);
 			var intersections = ray.intersectObjects(collisionObjs.children);
 			if(intersections.length > 0) {
 				if(i === 0 && moveForward) {
@@ -289,9 +286,6 @@ function animate() {
 			socket.emit('movement', JSON.stringify(controls.getObject().position));
 		}
 		sendPos++;
-		
-		
-
 	}
 
 	renderer.render( scene, camera );

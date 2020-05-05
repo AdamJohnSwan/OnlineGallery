@@ -7,10 +7,6 @@ var port = process.env.PORT || 3000;
 app.use('/public', express.static(process.cwd() + '/public'));
 
 app.get('/', function(req, res){
-  res.sendFile(__dirname + '/pages/home.html');
-});
-
-app.get('/world', function(req, res){
   res.sendFile(__dirname + '/pages/world.html');
 });
 
