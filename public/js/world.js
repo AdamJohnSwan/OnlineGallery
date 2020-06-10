@@ -56,7 +56,7 @@ function init() {
 		loaderContainer.style.display = 'block';
 	});
 
-	scene.add( controls.getObject());
+	scene.add( camera);
 
 	
 	var onKeyDown = function ( event ) {
@@ -237,9 +237,9 @@ function animate() {
 			oppositeRightDirection,
 			oppositeLeftDirection
 		];
-		
+
 		rayDirections.forEach((rayDir, i) => {
-			var ray = new THREE.Raycaster( controls.getObject().position, rayDir,0 , 1);
+			var ray = new THREE.Raycaster( camera.position, rayDir,0 , 1);
 			var intersections = ray.intersectObjects(collisionObjs.children);
 			if(intersections.length > 0) {
 				if(i === 0 && moveForward) {
@@ -283,7 +283,7 @@ function animate() {
 		
 		// Only send the 20th position result so the server doesn't get bogged down
 		if(sendPos % 20 === 0) {
-			socket.emit('movement', JSON.stringify(controls.getObject().position));
+			socket.emit('movement', JSON.stringify(camera.position));
 		}
 		sendPos++;
 	}
