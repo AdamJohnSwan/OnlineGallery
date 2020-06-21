@@ -26,7 +26,9 @@ var PointerLockControls = function ( camera, domElement ) {
 	//
 
 	var scope = this;
-
+	
+	var isTouched = false;
+	
 	var changeEvent = { type: 'change' };
 	var lockEvent = { type: 'lock' };
 	var unlockEvent = { type: 'unlock' };
@@ -43,7 +45,7 @@ var PointerLockControls = function ( camera, domElement ) {
 
 		var movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
 		var movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
-
+		
 		euler.setFromQuaternion( camera.quaternion );
 
 		euler.y -= movementX * 0.002;
@@ -55,6 +57,20 @@ var PointerLockControls = function ( camera, domElement ) {
 
 		scope.dispatchEvent( changeEvent );
 
+	}
+	
+	function onTouchMove(event) {
+		debugger;
+	}
+	
+	function onTouch(event) {
+		if ( scope.isLocked === false ) return;
+		isTouched = true;
+	}
+
+	function onTouchEnd(event) {
+		if ( scope.isLocked === false ) return;
+		isTouched = false;
 	}
 
 	function onPointerlockChange() {
@@ -69,7 +85,7 @@ var PointerLockControls = function ( camera, domElement ) {
 
 			scope.dispatchEvent( unlockEvent );
 
-			scope.isLocked = false;
+			//scope.isLocked = false;
 
 		}
 
@@ -84,6 +100,9 @@ var PointerLockControls = function ( camera, domElement ) {
 	this.connect = function () {
 
 		document.addEventListener( 'mousemove', onMouseMove, false );
+		document.addEventListener( 'touchstart', onTouch, false );
+		document.addEventListener( 'touchmove', onTouchMove, false );
+		document.addEventListener( 'touchend', onTouchEnd, false );
 		document.addEventListener( 'pointerlockchange', onPointerlockChange, false );
 		document.addEventListener( 'pointerlockerror', onPointerlockError, false );
 
