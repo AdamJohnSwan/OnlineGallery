@@ -16,10 +16,10 @@ A cool feature is that every person that visits your gallery will be visible to 
 
 1. Clone this repo
 2. Make sure you have node and npm installed
-	a. `node -v`
-	b. `npm -v`
+	1. `node -v`
+	2. `npm -v`
 3. Install dependencies
-	a. `npm install` 
+	1. `npm install` 
 4. Run the project
-	a. `npm start`
+	1. `npm start`
 5. visit `http://localhost:3000/` in your browser
