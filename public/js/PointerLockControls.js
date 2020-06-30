@@ -12,12 +12,11 @@ import {
 var PointerLockControls = function ( camera, domElement ) {
 
 	if ( domElement === undefined ) {
-
 		console.warn( 'THREE.PointerLockControls: The second parameter "domElement" is now mandatory.' );
 		domElement = document.body;
-
 	}
-
+	
+	this.dirPadIsTouched = false;
 	this.domElement = domElement;
 	this.isLocked = false;
 
@@ -29,8 +28,8 @@ var PointerLockControls = function ( camera, domElement ) {
 	
 	var oldTouchX = 0;
 	var oldTouchY = 0;
-	
 	var isTouchDevice = false;
+	var dirPadIsTouched = false;
 	
 	var changeEvent = { type: 'change' };
 	var lockEvent = { type: 'lock' };
@@ -64,6 +63,10 @@ var PointerLockControls = function ( camera, domElement ) {
 	
 	function onTouchMove(event) {
 		event.preventDefault();
+		// Don't rotate the camera if the directional pad is being touched
+		if(scope.dirPadIsTouched) {
+			return;
+		}
 		if(event.touches.length > 0) {
 			const touch = event.touches[0];
 			const touchEvent = {
@@ -84,9 +87,8 @@ var PointerLockControls = function ( camera, domElement ) {
 			oldTouchX = touch.clientX;
 			oldTouchY = touch.clientY;
 		}
-	
 	}
-	
+
 	function onPointerlockChange() {
 
 		if ( document.pointerLockElement === scope.domElement ) {

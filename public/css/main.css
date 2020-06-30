@@ -4,29 +4,7 @@ body, html {
 	height: 100%;
 }
 
-#home-container {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%); /* IE 9 */
-    -webkit-transform: translate(-50%, -50%); /* Chrome, Safari, Opera */	
-	display:flex;
-	flex-direction: column;
-	justify-content: center;    
-}
 
-#location-form {
-	width: 400px;
-	background-color: rgba(180, 180, 180, 0.2);
-	margin: 0 auto;
-	color: white;
-	min-height: 10em;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	border-radius: 5px;
-}
 input, button {
 	background-color: transparent;
 	color: white;
@@ -95,7 +73,7 @@ button {
 
 #dir-pad {
 	display: none;
-	opacity: 50%;
+	opacity: 0.3;
 	background-image:url('/public/images/dir-pad.svg');
 	padding: 5px;	
 	background-size: contain;

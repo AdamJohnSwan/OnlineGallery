@@ -27,6 +27,13 @@ var collisionObjs = null;
 var loader = document.getElementById("loader");
 var loaderContainer = document.getElementById("loader-container");
 var startButton = document.getElementById("start");
+var dirPad = document.getElementById("dir-pad");
+
+var dirPadRect = dirPad.getBoundingClientRect();
+var dirCenterPoint = {
+	x: dirPadRect.left + (dirPadRect.width / 2),
+	y: dirPadRect.top + (dirPadRect.height / 2),
+};
 
 init();
 animate();
@@ -55,6 +62,10 @@ function init() {
 	controls.addEventListener( 'unlock', function () {
 		loaderContainer.style.display = 'block';
 	});
+
+	dirPad.addEventListener( 'touchstart', onDirPadTouchStart, false );
+	dirPad.addEventListener( 'touchmove', onDirPadTouchMove, false );
+	dirPad.addEventListener( 'touchend', onDirPadTouchEnd, false );
 
 	scene.add( camera);
 
@@ -169,12 +180,50 @@ function init() {
 
 }
 
+function onDirPadTouchStart(event) {
+	controls.dirPadIsTouched = true;
+}
+
+function onDirPadTouchMove(event) {
+	if(event.touches.length > 0) {
+		moveRight = false;
+		moveLeft = false;
+		moveBackward = false;
+		moveForward = false;
+		const touch = event.touches[0];
+		if(touch.clientX > dirCenterPoint.x) {
+			moveRight = true;	
+		} else if(touch.clientX < dirCenterPoint.x) {
+			moveLeft = true;
+		}
+		if(touch.clientY > dirCenterPoint.y) {
+			moveBackward = true;
+		} else if(touch.clientY < dirCenterPoint.y) {
+			moveForward = true;
+		}
+	}
+}
+
+function onDirPadTouchEnd(event) {
+	moveRight = false;
+	moveLeft = false;
+	moveBackward = false;
+	moveForward = false;
+	controls.dirPadIsTouched = false;
+}
+
 function onWindowResize() {
 
 	camera.aspect = window.innerWidth / window.innerHeight;
 	camera.updateProjectionMatrix();
 
 	renderer.setSize( window.innerWidth, window.innerHeight );
+	
+	dirPadRect = dirPad.getBoundingClientRect();
+	dirCenterPoint = {
+		x: dirPadRect.left + (dirPadRect.width / 2),
+		y: dirPadRect.top + (dirPadRect.height / 2),
+	};
 
 }
 
