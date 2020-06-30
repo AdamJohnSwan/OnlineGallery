@@ -1,6 +1,9 @@
 /**
+ * Original:
  * @author mrdoob / http://mrdoob.com/
  * @author Mugen87 / https://github.com/Mugen87
+ * Edited By:
+ * @author John Labod / https://labod.co/
  */
 
 import {
@@ -64,16 +67,26 @@ var PointerLockControls = function ( camera, domElement ) {
 	function onTouchMove(event) {
 		event.preventDefault();
 		// Don't rotate the camera if the directional pad is being touched
-		if(scope.dirPadIsTouched) {
+		if(scope.dirPadIsTouched || !scope.isLocked) {
 			return;
 		}
 		if(event.touches.length > 0) {
 			const touch = event.touches[0];
-			const touchEvent = {
-				movementX: touch.clientX - oldTouchX,
-				movementY: touch.clientY - oldTouchY
-			};
-			onMouseMove(touchEvent);
+
+			var movementX = touch.clientX - oldTouchX;
+			var movementY = touch.clientY - oldTouchY;
+			
+			euler.setFromQuaternion( camera.quaternion );
+
+			euler.y += movementX * 0.004;
+			euler.x += movementY * 0.004;
+
+			euler.x = Math.max( - PI_2, Math.min( PI_2, euler.x ) );
+
+			camera.quaternion.setFromEuler( euler );
+
+			scope.dispatchEvent( changeEvent );
+			
 			oldTouchX = touch.clientX;
 			oldTouchY = touch.clientY;
 		}
