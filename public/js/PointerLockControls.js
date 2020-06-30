@@ -30,6 +30,8 @@ var PointerLockControls = function ( camera, domElement ) {
 	var oldTouchX = 0;
 	var oldTouchY = 0;
 	
+	var isTouchDevice = false;
+	
 	var changeEvent = { type: 'change' };
 	var lockEvent = { type: 'lock' };
 	var unlockEvent = { type: 'unlock' };
@@ -61,7 +63,7 @@ var PointerLockControls = function ( camera, domElement ) {
 	}
 	
 	function onTouchMove(event) {
-		event.preventDefault()
+		event.preventDefault();
 		if(event.touches.length > 0) {
 			const touch = event.touches[0];
 			const touchEvent = {
@@ -76,6 +78,7 @@ var PointerLockControls = function ( camera, domElement ) {
 	}
 	
 	function onTouchStart(event) {
+		isTouchDevice = true;
 		if(event.touches.length > 0) {
 			const touch = event.touches[0];
 			oldTouchX = touch.clientX;
@@ -93,10 +96,11 @@ var PointerLockControls = function ( camera, domElement ) {
 			scope.isLocked = true;
 
 		} else {
-
-			//scope.dispatchEvent( unlockEvent );
-
-			//scope.isLocked = false;
+			//Touching causes a pointer lock change. Make sure the screen is not locked on mobile devices
+			if(!isTouchDevice) {
+				scope.dispatchEvent( unlockEvent );		
+				scope.isLocked = false;
+			}
 
 		}
 
