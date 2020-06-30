@@ -110,7 +110,6 @@ function init() {
 			case 68: // d
 				moveRight = false;
 				break;
-
 		}
 
 	};
